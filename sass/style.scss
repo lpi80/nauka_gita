@@ -1,0 +1,548 @@
+
+/* RESET.CSS /*
+/*Normalnie zbedne - tylko dla potrzeb tego miejsca */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/*************************************************************/
+$hover: 'not all and (hover: none)';
+$column: 12;
+$rwdColName: (
+  ('lg', 'minLarge', 'maxLarge'),
+  ('m', 'minMedium', 'maxMedium'),
+  ('s', 'minSmall', 'maxSmall')
+);
+
+$breakpoints: (
+  'minSmall':  ( min-width:  0 ),
+  'maxSmall':  ( max-width:  767px ),
+  'minMedium': ( min-width:  768px ),
+  'maxMedium': ( max-width:  1199px ),
+  'minLarge':  ( min-width: 1200px ),
+  'maxLarge':  ( max-width: 9999px )
+) !default;
+
+/// Mixin to manage responsive breakpoints
+@mixin respond-to($breakpoint, $secondBreakpoint: 'minSmall') {
+  // If the key exists in the map
+  @if map-has-key($breakpoints, $breakpoint) and map-has-key($breakpoints, $secondBreakpoint){
+    // Prints a media query based on the value
+      @media #{inspect(map-get($breakpoints, $breakpoint))} and #{inspect(map-get($breakpoints, $secondBreakpoint))} {
+        @content;
+      }
+    }
+  // If the key doesn't exist in the map
+  @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Available breakpoints are: #{map-keys($breakpoints)}.";
+  }
+}
+
+@each $a, $b, $c in $rwdColName {
+  @include respond-to($b,$c) {
+    @for $i from 0 through $column {
+      @if $i < 12 {
+        .col-#{$a}-#{$i + 1} {
+        	width: (100% / $column ) * ($i + 1);
+			float: left;
+			min-height: 1px;
+        }
+      }
+      .col-#{$a}-offset-#{$i} {
+          margin-left: (100% / $column ) * $i;
+      }
+    }
+  }
+}
+
+
+%grid_param_basic {
+  background-color: #fff;
+	text-align: center;
+	color: #000;
+} 
+
+ @mixin colHover {
+	  color: white;
+		width: 100%;
+		height: 200px;
+		line-height: 200px;
+		position: absolute;
+		display: inline-block;
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 0.5);
+}
+
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic");
+@import url("https://fonts.googleapis.com/css?family=Gloria+Hallelujah");
+
+
+body {
+   font-family: 'Times new roman', sans-serif;
+ }
+
+ * {
+	 box-sizing: border-box;
+ }
+ 
+/*HEADER*/
+.header {
+	background-color: #313332;
+
+    &__nav::before,
+    &__nav::after {
+    	content: "";
+    	display: table ;
+    }
+
+    &__nav::after {
+    	clear: both;
+    }
+
+    &__nav {
+    	width: 100%;
+    	max-width: 1200px;
+    	margin: 0 auto;
+    }   
+
+    @include respond-to('maxSmall') {
+        &__nav {
+            text-align: right;
+        }
+    }
+}
+
+.nav {
+    &__img {
+    	margin: 5px 0;
+    }
+
+    &__list {
+    	list-style-type: none;
+    	float: right;
+    }
+
+    &__element {
+        display:inline-block;
+    }
+
+    &__name  {
+        padding: 0 10px;
+        height: 50px;
+        line-height: 50px;
+        color: #fff;
+        display: block;
+        text-transform: uppercase;
+        text-decoration: none;
+    	border-radius: 5px;
+    }
+    
+    
+    @include respond-to('maxSmall') {
+        &__img {
+            display:none;
+            display: block;
+            float: left;
+        }
+        
+        &__name,
+        &__element {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    @include respond-to('minMedium', 'maxMedium') { 
+      &__img {
+		    display:none;
+	    }
+    }
+    
+    @media #{$hover}  {
+	    &__name:hover {
+		    background: #ccc;
+		    color: #000;
+		    font-weight: bold;
+	    }  
+	  }
+
+}
+
+.button {
+	display: none;
+
+    &__name {
+        cursor: pointer;
+        font-size: 50px;
+        color: white;
+        line-height: 50px;
+        padding: 0 10px;
+        display: none;
+    }
+ 
+    @include respond-to('maxSmall') { 
+        &__name,
+        &:checked ~ .nav__list {
+            display: block;
+        }
+        
+        &:not(:checked) ~ .nav__list {
+            display: none;
+        }
+    }
+}
+
+/*HERO*/
+.hero {
+	height: 700px;
+	background-image: url("https://images.unsplash.com/photo-1518775005910-7aa25aa9614a");
+	background-size: cover;
+	background-repeat: no-repeat;
+
+    &__slogan {
+        position: relative;
+        top: 400px;
+        width: 40vw;
+        max-width: 400px;
+        float: right;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 50px 0;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 30px;
+        text-shadow: gray 2px 2px;
+        color: #fff;
+        text-align: center;
+    }
+
+    @include respond-to('maxSmall') { 
+        width: 100%;
+		text-align: center;
+    }
+}
+
+/* GRID*/
+.benefit,
+.gallery,
+.personel,
+.numbers,
+.footer,
+.section-picture {
+	@extend %grid_param_basic;
+}
+
+.row {
+    display: block;
+    &::before,
+    &::after {
+	    content: "";
+	    display: table ;
+    }
+
+    &::after {
+	    clear: both;
+    }
+}    
+
+/*BENEFITS*/
+.benefit {
+    &__title {
+	    font-size: 1.5rem;
+	    color: #000;
+    }
+
+    &__desc {
+    	color: #9A9A9A; 
+    	padding-top: 10px;
+    }
+
+    &__col {
+    	padding: 2vw;
+    }
+
+    &__fa {
+    	font-size: 4em;
+    	color: #9A9A9A;
+    	padding: 10px;
+    	border-radius: 5px;
+    }
+    
+    @media #{$hover}  {
+    	&__col:hover > &__fa,
+    	&__col:hover > &__title {
+		    color: #00C7E8;
+	    }
+    }
+}
+
+/*SUB_HEADER*/
+.sub_header {
+	width: 50%;
+	margin: 0 auto;		
+	text-align: center;	
+	padding-bottom: 3vh;
+	
+    &__title {
+        margin-top: 5vh;
+        padding: 10px 0;
+        text-transform: uppercase;
+        color: 0;	
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    &__desc {
+        color: #9A9A9A;
+        font-size: 1.2rem;
+    }
+}
+
+/*GALLERY*/
+.gallery {
+    &__img {
+        width: 100%;
+        height: 200px;
+        display: block;
+        object-fit: cover;
+    }
+
+    &__col {
+        position: relative;
+    }
+
+    &__layer {
+        display: none;
+    }   
+    
+    &__fa {
+        padding: 0 10px;
+    }
+    
+    @media #{$hover}  {
+	    &__col:hover &__layer {
+        @include colHover;
+	    }
+    }
+}
+
+/*PERSONEL*/
+.personel {
+	padding: 50px 0;
+
+    &__col {
+        position: relative;
+    }
+
+    &__img {
+        width: 100%;
+        height: 200px;
+        display: block;
+        object-fit: cover;
+    	border-radius: 50%;
+    }
+
+    &__layer {
+        display: none;
+        border-radius: 50%;
+    }
+
+    &__title {
+    	color: #9A9A9A;
+    	font-size: 1.5rem;
+    	padding: 10px 0;
+    }
+
+    &__desc {
+    	padding: 0 10px;
+    }      
+
+    @include respond-to('maxSmall') { 
+    	&__img,
+	    &__title {
+	    	width: 100%;
+	    }
+
+	    &__col {
+	    	width: 55%;
+	    	left: 22.5%;
+	    }  
+    }
+
+    @media #{$hover}  {
+      &__col:hover &__layer {
+        @include colHover;
+        }
+   	}
+}
+
+/*SECTION WITH PICTURE*/
+.section-picture {
+	margin-bottom: 50px;
+
+    &__col {
+        position: relative;
+    }
+
+    &__img {
+    	width: 100%;
+    	height: 200px;
+    	display: block;
+    	object-fit: cover;
+    }
+
+    &__layer {
+    	display: none;
+    }
+
+    &__title {
+    	text-transform: uppercase;
+    	font-size: 1.8rem;
+    	font-weight: bold;
+    	text-shadow: 1px 1px 1px gray;
+    	padding: 10px 0;
+    }
+
+    &__desc {
+    	font-size: 1.2rem;
+        &--italic {
+        	font-style: italic;
+        }
+    }
+    
+    @media #{$hover}  {
+	    &__col:hover &__layer {
+        @include colHover;
+	    }
+    }
+}
+
+/*NUMBERS*/
+.numbers {
+	margin-bottom: 50px;
+
+    &__title {
+    	font-family: 'Gloria Hallelujah', cursive;
+    	font-size: 40px;
+    	padding: 10px 0;
+    }
+
+    &__desc {
+    	color: #00C7E8;
+    	font-size: 20px;
+    }
+
+    @include respond-to('maxSmall') { 
+        &__desc {
+            padding-bottom: 30px;
+        }
+    }
+}
+
+/*FOOTER*/
+.footer {
+    &__desc {
+	    font-size: 1rem;
+	    font-weight: bold;
+	    padding: 10px 10px;
+ 
+        &--small {
+	        font-weight: normal;
+        }
+    }
+
+    &__title {
+    	width: 70%;
+    	font-size: 1.3rem;
+    	text-transform: uppercase;
+    	border-bottom: 1px solid #fff;
+    	padding: 10px 0;
+    }
+
+    &__span {
+    	background: #323433;
+    	padding: 0 20px;
+    	position: relative;
+    	top: 15px;
+    }
+
+    &__row {
+    	background: #323433;
+    	color: white;
+    	width: 100%;
+    	text-align: left;
+        &--rights {
+            background: black;
+            height: 50px;
+            line-height: 50px;
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
+
+/*SOCIAL MEDIA*/
+.social-media {
+    &__fa {
+	    font-size: 30px;
+	    color: #fff;
+	    padding: 10px;
+    }
+    
+    @include respond-to('maxSmall') { 
+        text-align: center;	
+    }
+
+    @media #{$hover}  {
+        &__fa:hover {
+            background: #00C7E8;
+        }
+    }
+}
+
+/*RESOLUTIONS - SMARTPHONE*/
+@include respond-to('maxSmall') { 
+	.col-s {width: 100%;}
+}
+
+	
